@@ -1,1 +1,0 @@
-/usr/local/nagvis/share/userfiles/gadgets/GEOoverall.php
