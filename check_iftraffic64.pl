@@ -58,6 +58,9 @@
 #       * 12_10_2014 Fixed issue when using string description for interface printing extra line with interface name and OID
 #       * 07_06_2015 Added SNMP v3 support, base code provided by Rogerio Tomassoni de Araujo Junio <rogerio.tomassoni (at) cnpem.br>
 #
+# gh = GeoHolz https://blog.jolos.fr
+#       * 02_02_2016 Now the plugin output is only in KB/s, no auto conversion. Needed for plugin PNP4Nagios.
+#        
 # based on check_traffic from Adrian Wieczorek, <ads (at) irc.pila.pl>
 #
 # Send us bug reports, questions and comments about this plugin.
