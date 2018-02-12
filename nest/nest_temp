@@ -1,0 +1,84 @@
+#!/usr/bin/zsh
+
+# plugin developed by GeoHolz
+# https://blog.jolos.fr
+
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+######       CHANGE LOG        #########
+# 15/10/2016 : V0.1:Start
+# 27/10/2016 : Away temperature target
+
+
+
+
+# If run with the "autoconf"-parameter, give our opinion on wether we
+# should be run on this system or not. This is optinal, and only used by
+# munin-config. In the case of this plugin, we should most probably
+# always be included.
+
+if [ "$1" = "autoconf" ]; then
+        echo yes:
+        exit 0
+fi
+
+DEVICEID=
+ACCESSTOKEN=
+STRUCTUREID=
+
+# If run with the "config"-parameter, give out information on how the
+# graphs should look.
+
+if [ "$1" = "config" ]; then
+        # The host name this plugin is for. (Can be overridden to have
+        # one machine answer for several)
+
+        # The title of the graph
+        echo 'graph_title Temperature of Nest Thermostat'
+        # Arguments to "rrdtool graph". In this case, tell it that the
+        # lower limit of the graph is '0', and that 1k=1000 (not 1024)
+        echo 'graph_args --base 1000'
+        # The Y-axis label
+        echo 'graph_vlabel Temperature'
+        # We want Cur/Min/Avg/Max unscaled (i.e. 0.42 load instead of
+        # 420 milliload)
+        echo 'graph_scale no'
+        # Graph category. Defaults to 'other'
+        echo 'graph_category Home'
+        # The fields. "label" is used in the legend. "label" is the only
+        # required subfield.
+        echo 'Target.label Target'
+                echo 'Ambient.label Ambient'
+
+        # Last, if run with the "config"-parameter, quit here (don't
+        # display any data)
+        exit 0
+fi
+HVAC_MODE=$(curl -s -L https://developer-api.nest.com/devices/thermostats/${DEVICEID}/hvac_mode\?auth\=${ACCESSTOKEN})
+T_AMBIENT=$(curl -s -L https://developer-api.nest.com/devices/thermostats/${DEVICEID}/ambient_temperature_c\?auth\=${ACCESSTOKEN})
+
+
+if [ $HVAC_MODE = "\"heat\"" ]
+then
+        T_TARGET=$(curl -s -L https://developer-api.nest.com/devices/thermostats/${DEVICEID}/target_temperature_c\?auth\=${ACCESSTOKEN})
+else
+        T_TARGET=$(curl -s -L https://developer-api.nest.com/devices/thermostats/${DEVICEID}/away_temperature_low_c\?auth\=${ACCESSTOKEN})
+fi
+
+echo -n "Ambient.value "
+echo $T_AMBIENT
+
+echo -n "Target.value "
+echo $T_TARGET
