@@ -25,8 +25,8 @@ if [ "$1" = "autoconf" ]; then
         exit 0
 fi
 
-DEVICEID=rhTIHDZGeqJPJxsPYhsTo4H3Rol50ryP
-ACCESSTOKEN=c.B6i1RPEQGo6EE9IkFHtMio01hCJklCy9TTQgpMrV3fGFlWzhIFtZbJrEL5WIFGNjshfIFtMugGJAuVhJqgOacTTMP2mvYPKChmrSUGWdvN92jFVCyRmDQrZ3Iu5pVNK21lSdJkQUsePRlmpx
+DEVICEID=
+ACCESSTOKEN=
 STRUCTUREID=0
 
 # If run with the "config"-parameter, give out information on how the
